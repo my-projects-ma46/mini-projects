@@ -1,0 +1,10 @@
+Luis:0:2,3,4,5,5
+Byron:1:2,3,4,5,5
+Mota:1:2,3,4,5,5
+Henrique:1:2,3,4,5,5
+Caio:1:2,3,4,5,5
+Matheus:0:2,3,4,5,5
+Rafael:1:2,3,4,5,5
+Borda:1:2,3,4,5,5
+Marcelo Araujo:1:2,3,4,5,5
+Marcelo Magalhoes:1:2,3,4,5,5

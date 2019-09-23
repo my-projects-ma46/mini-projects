@@ -1,7 +1,7 @@
-TREZE = 13
+VALOR_ACHAR = 13
 INICIO = 255
-FIM = 999
-NUM_PARTICIPANTES = 2
+FIM = 400
+NUM_A_MAIS = 2
 
 def som(a, b):
     return a + b
@@ -27,15 +27,15 @@ def acha_treze(entrada):
         for j in range(qtd_oper):
             # (a _i_ b) _j_ c
             result = operador[j](operador[i](a, b), c )
-            if( result == TREZE):
+            if( result == VALOR_ACHAR):
                 return i, j, ''
     for i in range(qtd_oper):
         for j in range(qtd_oper):
             result = operador[j](operador[i](a, b), c )
-            if((result + NUM_PARTICIPANTES) == TREZE):
-                return i, j, ", com + {} participantes".format(NUM_PARTICIPANTES)
-            if((result - NUM_PARTICIPANTES) == TREZE):
-                return i, j, ", com - {} participantes".format(NUM_PARTICIPANTES)
+            if((result + NUM_A_MAIS) == VALOR_ACHAR):
+                return i, j, ", com + {} a mais".format(NUM_A_MAIS)
+            if((result - NUM_A_MAIS) == VALOR_ACHAR):
+                return i, j, ", com - {} a mais".format(NUM_A_MAIS)
             
     return -1, -1, ''
 
@@ -66,7 +66,7 @@ for episodio in range(INICIO, FIM+1):
     achou, oper1, oper2, valores, extra = acha_permut(centena, dezena, unidade)
 
     if(achou):
-        print("Episódio {}: ".format(episodio),end='')
+        print("valor {}: ".format(episodio),end='')
         res_parc = operador[oper1](valores[2], valores[1])
         if(extra == ''):
             enc += 1
@@ -78,6 +78,6 @@ for episodio in range(INICIO, FIM+1):
         )
     else:
         nao += 1
-        #print("Episódio {}: não foi encontrado".format(episodio))
+        #print("valor {}: não foi encontrado".format(episodio))
 
 # print(enc, part, nao)
