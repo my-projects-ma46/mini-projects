@@ -33,9 +33,9 @@ def acha_treze(entrada):
         for j in range(qtd_oper):
             result = operador[j](operador[i](a, b), c )
             if((result + NUM_A_MAIS) == VALOR_ACHAR):
-                return i, j, ", com + {} a mais".format(NUM_A_MAIS)
+                return i, j, ", com + {} participantes".format(NUM_A_MAIS)
             if((result - NUM_A_MAIS) == VALOR_ACHAR):
-                return i, j, ", com - {} a mais".format(NUM_A_MAIS)
+                return i, j, ", com - {} participantes".format(NUM_A_MAIS)
             
     return -1, -1, ''
 
@@ -58,26 +58,30 @@ enc = 0
 part = 0
 nao = 0
 
+arqSaida = open('saida.txt', 'w')
+
 for episodio in range(INICIO, FIM+1):
     numero = str(episodio)
-
+    linhaSaida = ''
     centena, dezena, unidade = int(numero[2]), int(numero[1]), int(numero[0])
 
     achou, oper1, oper2, valores, extra = acha_permut(centena, dezena, unidade)
 
     if(achou):
-        print("valor {}: ".format(episodio),end='')
+        linhaSaida = "Episódio {}: ".format(episodio)
         res_parc = operador[oper1](valores[2], valores[1])
         if(extra == ''):
             enc += 1
         else:
             part += 1
-        print("{} {} {} = {}, e {} {} {}{} = 13".format(
-            valores[2], oper_dic[operador[oper1]], valores[1], res_parc,
-            res_parc, oper_dic[operador[oper2]], valores[0], extra )
+        linhaSaida = linhaSaida + ("{} {} {} = {}, e {} {} {}{} = 13".format(
+            valores[2], oper_dic[operador[oper1]], valores[1], int(res_parc),
+            int(res_parc), oper_dic[operador[oper2]], valores[0], extra )
         )
+        print(linhaSaida)
+        arqSaida.write(linhaSaida+'\n')
     else:
         nao += 1
         #print("valor {}: não foi encontrado".format(episodio))
-
+arqSaida.close()
 # print(enc, part, nao)

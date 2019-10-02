@@ -1,6 +1,12 @@
 import os
 
 '''
+Para rodar o programa: 
+    $ python3 mudaNomeArq.py
+
+coloque na mesma pasta dos arquivos, pode por em outra pasta,
+basta alterar a variável `caminho`
+
 Objetivo do programa:
 Alterar os nomes grandes de 
 arquivos para nomes pequenos, e depois poder alterar para
@@ -11,11 +17,11 @@ github: https://github.com/santosm46
 '''
 
 # caminho dos arquivos
-caminho = 'fazendo/'
+caminho = ''
 # nome da atividade
-atividade = 'aula1exer2Evolucao5'
+atividade = 'aula3exer1'
 #nome do aluno
-aluno = '_WelisonRegis_17-0024121'
+aluno = '_AnaBraga_12-1223222'
 
 # constantes, serve para pegar valor de tuplas
 NOME = 0
@@ -54,8 +60,6 @@ def loopPrograma(relacoesArq):
             break
         print("\n")
 
-# print(os.listdir("trab"))
-
 # pega o nome longo e monta o nome, juntando o caminho, nome da atividade
 # nome do arquivo, aluno e tipo do arquivo
 def montaNomeArq(nomeArq):
@@ -65,11 +69,15 @@ def montaNomeArq(nomeArq):
 def montaNovoNome(nome, val):
     return caminho+nome+'.'+val[TIPO]
 
+def nomeCurto(nome):
+    limite = 15
+    return nome[:limite]+('...' if (len(nome)>limite) else '')
+
 def renomearArq(antigo, novo):
     try:
         os.rename(antigo, novo)
     except: # erro causado geralmente por arquivo não existir
-        print("Não foi possível renomear ["+antigo+"] para ["+novo+"]")
+        print("Não foi possível renomear ["+nomeCurto(antigo)+"] para ["+nomeCurto(novo)+"]")
 
 # simplifica o nome dos arquivos
 def simplificar(relacoesArq):
