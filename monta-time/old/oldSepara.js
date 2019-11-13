@@ -1,4 +1,5 @@
 
+
 print = console.log;
 
 function copiar(lista) {
@@ -29,7 +30,7 @@ function todosPreenchidos(listas, qtdListas, tamMax) {
 }
 
 var vez = 0;
-function colocar(numeros, qualNum, qualLista, listas, qtdListas, tamanhos, tamMax) {
+function colocar(numeros, qualNum, qualLista, listas, qtdListas, tamanhos, tamMax, cicloUm) {
     
     vez += 1;
     var novoQualNum = copiar(qualNum) + 1;
@@ -60,6 +61,11 @@ function colocar(numeros, qualNum, qualLista, listas, qtdListas, tamanhos, tamMa
     var melhorOpcao = colocar(numeros, novoQualNum, 0, novaListas, qtdListas, novosTamanhos, tamMax);
     var diffMelhorOpcao = diferenca(novaListas);
     // loop calculando as diferenças das listas com a insersão do valor
+    
+    if(cicloUm) {
+        console.log("ciclo: 0/" + qtdListas);
+    }
+    
     for (i=1; i<qtdListas; i++) {
         
         opcao = colocar(numeros, novoQualNum, i, novaListas, qtdListas, novosTamanhos, tamMax);
@@ -68,6 +74,9 @@ function colocar(numeros, qualNum, qualLista, listas, qtdListas, tamanhos, tamMa
         if (todosPreenchidos(opcao, qtdListas, tamMax) && (diffOpcao < diffMelhorOpcao)) {
             melhorOpcao = opcao;
             diffMelhorOpcao = diffOpcao;
+        }
+        if(cicloUm) {
+            console.log("ciclo: " + i + "/" + qtdListas);
         }
     }
     return melhorOpcao;
@@ -83,39 +92,21 @@ function calcularTimes(pessoas, pessoasPorTime) {
         tamanhos.push(0);
     }
     // print(times);
-    return colocar(pessoas, -1, 0, times, qtdTimes, tamanhos, pessoasPorTime);
-}
-
-function shuffle(array) {
-    // função de embaralhar vetor
-    // fonte: https://github.com/Daplie/knuth-shuffle
-    var currentIndex = array.length, temporaryValue, randomIndex;
-  
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-  
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-  
-      // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
-    }
-  
-    return array;
+    return colocar(pessoas, -1, 0, times, qtdTimes, tamanhos, pessoasPorTime, true);
 }
 
 console.clear();
 
 // cada valor seria o valor geral das habilidades de um jogador
-var pessoas = shuffle([5,4,3,2,1,5,3,2,4]);
+// var pessoas = shuffle([5,4,3,2,1,5,3,2,4]);
 
 
 // exemplo de resultado esperado:
 // pessoasPorTime = 3;
-// pessoas = [3,1,2,6,5,7,4,8,9];
+const pessoasPorTime = 4;
+// const valores = [3,1,2,6,5,7,4,8,9,10,11,12];
+const valores = [3,1,2,6,5,7,4,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,34,36];
+var pessoas = shuffle(valores);
 
 // soma de cada lista (time) = 15
 // times: 
@@ -125,7 +116,6 @@ var pessoas = shuffle([5,4,3,2,1,5,3,2,4]);
 //     [7,6,2]
 // ]
 
-const pessoasPorTime = 3;
 
 var times = calcularTimes(pessoas, pessoasPorTime);
 print('rodou ' + vez + ' vezes');
