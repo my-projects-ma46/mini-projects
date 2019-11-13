@@ -1,39 +1,38 @@
 
-const LINHAS = 30;
-const COLUNAS = 120;
+const {
+    LINHAS, COLUNAS,
+    ESQ, BAIXO, CIMA, DIR,
+    GRASS, CELULA,
+    VELOCIDADE,
+    INDO_RASTRO, VOLTANDO_RASTRO,
+    VISUALIZAR, totalLoops, delay, TAMANHO_RASTRO, LIMPAR_HIST, BACK_AND_FORTH
+} = require('./settings.js');
 
-const CIMA = 0;
-const BAIXO = 1;
-const ESQ = 2;
-const DIR = 3;
+var rastro = INDO_RASTRO;
 
-const GRASS = ' ';
-const PONTO = '@';
+var x=Math.floor(COLUNAS/2), y=Math.floor(LINHAS/2);
+// var x=1, y=1; // se for descomentar essa linha, comente a de cima
 
-const VELOCIDADE = 1;
-
-var rastro = '*';
-
-print = console.log;
-var x=1, y=1;
-var parar = 1, dir=0;
+var direcao=0;
 var campo = [];
 // var log = 's';
 
+var historico = [];
+
 // imprime o campo no terminal
 function imprimeCampo() {
-    // system("clear");
+    console.clear();
 
     for(var i = 0; i < LINHAS; i++) {
         for(var j = 0; j < COLUNAS; j++) {
             process.stdout.write(campo[i][j]);
         }
-        print("|");
+        console.log("|");
     }
     for(var j = 0; j < COLUNAS; j++) {
         process.stdout.write("-");
     }
-    print("");
+    console.log("");
 }
 
 function novaLinha() {
@@ -60,55 +59,54 @@ function sleep(delay) {
     while (new Date().getTime() < start + delay);
 }
 
-function setCell(valor) {
-    try {
-        // print(campo);
-        campo[y][x] = valor;
-    }
-    catch(err) {
-        // print('deu erro: ' + campo[x][y]);
-        print('ponto: ' + valor);
-        print('x: ' + x + '  y: ' + y);
-        // print(err);
-        // throw "bola";
-    }
+function setCell(valor, posX, posY) {
+    campo[posY][posX] = valor;
 }
 
 function main() {
-
-    iniciaCampo();
-    const totalLoops = 1500;
-    const delay = 25;
+    var podeRemover = false;
     var loop = 0;
+    var minimo, maximo;
 
-    // log = log + campo[x-1][y];
-    // if(campo[x-1][y] == '*') {
-    //     return -1;
-    //     if((x + VELOCIDADE + 2) < COLUNAS) {
-    //         x += (VELOCIDADE + 2);
-    //     }
-    // }
-    while(loop < totalLoops) {
-        console.clear();
-        // pega numero aleatório de 0 a 3
-        // vai indicar em qual direção mover
+    if(BACK_AND_FORTH) {
+        var maximo = 3;
+        var minimo = 1;
+    } else {
+        var maximo = 4;
+        var minimo = 0;
+    }
+    
+    iniciaCampo();
+    
+    while(loop <= totalLoops) {
         
-
-        if (loop < 1000) {
-            dir = Math.floor(Math.random() * 5);
+        // calcular comportamento (ir ou voltar)
+        if(BACK_AND_FORTH) {
+            if (x == COLUNAS-1) {
+                rastro = VOLTANDO_RASTRO;
+                // exclui movimento de ir
+                minimo = 0;
+            }
+            else if(x == 0) {
+                rastro = INDO_RASTRO;
+                // exclui movimento de voltar
+                minimo = 1;
+            }
         }
-        else {
-            rastro = '.';
-            dir = Math.floor(Math.random() * 3);
-        }
-        // limpa o lugar que o ponto está
-        // campo[x][y] = GRASS;
-        // campo[x][y] = '*';
-        setCell(rastro);
+        
+        // escolhe um valor aleatório que vai indicar em qual direção mover
+        direcao = Math.floor(minimo + Math.random() * maximo);
+        
+        setCell(rastro, x, y);
         
         // move o ponto em alguma direção, caso a direção que vai mover
         // não seja o limite do campo
-        switch(dir) {
+        switch(direcao) {
+            case ESQ:
+                if((x - VELOCIDADE) >= 0) {
+                    x -= VELOCIDADE;
+                }
+                break;
             case CIMA:
                 if((y - VELOCIDADE) >= 0) {
                     y -= VELOCIDADE;
@@ -119,32 +117,33 @@ function main() {
                     y += VELOCIDADE;
                 }
                 break;
-            case ESQ:
-                if((x - VELOCIDADE) >= 0) {
-                    x -= VELOCIDADE;
-                }
-                break;
-            case DIR:
-                if((x + VELOCIDADE) < COLUNAS) {
-                    x += VELOCIDADE;
-                }
-                break;
-            case 4:
+            case direcao:
                 if((x + VELOCIDADE) < COLUNAS) {
                     x += VELOCIDADE;
                 }
                 break;
             default:
-                print("valor deconhecido: " + dir);
+                console.log("valor deconhecido: " + direcao);
                 break;
         }
 
         // marca o lugar que o ponto está no campo
         
-        setCell(PONTO);
-        // print("[%d][%d] dir: %d\n",x,y,dir);
-        // imprimeCampo();
-        // sleep(delay);
+        setCell(CELULA, x, y);
+        historico.push({'x':x, 'y':y});
+        if(podeRemover && LIMPAR_HIST) {
+            var posAntiga = historico.shift();
+            setCell(GRASS, posAntiga.x, posAntiga.y);
+        }
+        else {
+            podeRemover = loop > TAMANHO_RASTRO;
+        }
+        
+        if(VISUALIZAR) {
+            imprimeCampo();
+            console.log('loop ' + loop + '/' + totalLoops);
+            sleep(delay);
+        }
         loop += 1;
 
     }
@@ -154,7 +153,3 @@ function main() {
 }
 
 var a = main();
-// print(campo.length);
-// print(campo[0].length);
-
-// print('>>>' + log + '<<<');
