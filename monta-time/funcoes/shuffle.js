@@ -1,27 +1,37 @@
 
-function shuffle(array) {
-    // função de embaralhar vetor
-    // fonte: https://github.com/Daplie/knuth-shuffle
-    var currentIndex = array.length, temporaryValue, randomIndex;
-  
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-  
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-  
-      // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
+function mod(x) { return (x<0 ? -x : x); }
+
+function makeSwaps(players, pace, tolerance=3, probSwap=0.5) {
+    const size = players.length;
+
+    if(size > pace) {
+        let index = pace;
+        // percorre fazendo swap
+        for(var i = 0; index < size; index++, i++) {
+            // se não são muito diferentes, faz swap
+            if(mod(players[index].overall - players[i].overall) <= tolerance) {
+                // probabilidade de fazer swap
+                if(Math.random() >= probSwap) {
+                    // swap nos dois
+                    let aux = players[index];
+                    players[index] = players[i];
+                    players[i] = aux;
+                }
+            }
+        }
     }
-  
-    return array;
 }
 
+function randTeam(players) {
+    const firstWave = 1, secondWave = 4;
+
+    makeSwaps(players, firstWave);
+    makeSwaps(players, secondWave);
+
+    return players;
+}
 
 module.exports = {
-    shuffle: shuffle
+    randTeam
 };
 

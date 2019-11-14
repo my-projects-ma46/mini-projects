@@ -1,17 +1,26 @@
-
-var { shuffle } = require('./funcoes/shuffle');
+// incluindo função de calcular times
 var { calcularTimes } = require('./funcoes/calcularTimes');
+
+// requisição de jogadores
 var { users } = require('./funcoes/users');
 
-print = console.log;
+// n° de pessoas por time pode vir como parâmetro da requisição
+const pessoasPorTime = 3;
 
+var {teams, reserve} = calcularTimes(users, pessoasPorTime);
+
+// imprimindo dados para debug
 console.clear();
+console.log("todos os jogadores");
+console.log(users);
+console.log("");
+
+console.log('\ntimes:');
+for(var i = 0; i<teams.length; i++) {
+    console.log(teams[i]);
+    console.log('');
+}
+console.log('\nreserva:');
+console.log(reserve);
 
 
-const pessoasPorTime = 6;
-var jogadores = shuffle(users);
-print("todos os jogadores");
-print(jogadores);
-print("\n");
-var times = calcularTimes(jogadores, pessoasPorTime);
-print(times);
